@@ -1,16 +1,17 @@
+$font-color: rgb(88, 89, 91);
+
 .containerForhomePage {
   padding: 2rem;
   padding-top: 4rem;
   padding-bottom: 4rem;
-
-  background-color: rgba(242, 240, 238, 1);
+  // background-color: rgba(242, 240, 238, 1)
   box-sizing: border-box;
   border: 0 solid #e2e8f0;
   .containerForPortfolio {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     padding: 2rem;
-    color: rgba(88, 89, 91, 1);
-    background-color: rgba(255, 255, 255, 1);
+    // color: rgba(88, 89, 91, 1);
+    // background-color: rgba(255, 255, 255, 1);
     border-radius: 5px;
   }
   .containerForFolioLogo {
@@ -20,9 +21,67 @@
     width: 20px;
     height: 20px;
   }
+  .navcontainer {
+    display: flex;
+  }
+  .containerForContactDtls {
+    text-align: left;
+    // z-index: 1;
+  }
+  .containerForNavLinks {
+    text-align: right;
+    // z-index: 1;
+  }
+  .mouseHoverEventChange {
+    // z-index: 1;
+  }
+  .emaildiv {
+    display: -webkit-inline-box;
+  }
+  .emailStyle {
+    padding: 3px 10px 0px 10px;
+  }
+  .emailIconStyle {
+    padding: 4px 01px 0px 10px;
+  }
+  .themeChangeButton {
+    margin-top: -4px;
+  }
+  .anchorTextdecorationNone {
+    text-decoration: none;
+    color: inherit;
+    display: -webkit-inline-box;
+  }
+  .svgImgStyle {
+    width: 23px;
+    height: 24px;
+  }
 }
 
 html {
   font-family: Roboto, sans-serif;
   line-height: 1.5;
+  color: $font-color;
+}
+
+.ball {
+  width: 5px;
+  height: 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background: red;
+}
+
+.ball1 {
+  width: 30px;
+  height: 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background: black;
 }
