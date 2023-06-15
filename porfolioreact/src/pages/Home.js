@@ -168,7 +168,6 @@ export default function Home() {
     // homecontainer.addEventListener("click", (e) => {
     //   let cursor = document.querySelector(".ball1");
     //   gsap.to(cursor, {
-    //     width: "70px",
     //     height: "70px",
     //     duration: 1,
     //   });
