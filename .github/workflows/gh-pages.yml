@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ cursor/revamp-portfolio-with-react-tailwind-and-seo-99b9 ]
+    branches: [ master, cursor/revamp-portfolio-with-react-tailwind-and-seo-99b9 ]
   workflow_dispatch:
 
 permissions:
