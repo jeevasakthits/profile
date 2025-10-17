@@ -1,308 +1,123 @@
-import { useState, useLayoutEffect } from "react";
-import * as React from "react";
-import { Grid } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import { Box } from "@mui/material";
-import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
-import "../styles/homepagestyle.scss";
-import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
-import { gsap } from "gsap";
-
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 const navPages = [
   {
     title: "Works",
     navigate_url: "/works",
-    imageSrc: "./assets/works.svg",
+    imageSrc: "/assets/works.svg",
   },
   {
     title: "Resume",
     navigate_url: "/resume",
-    imageSrc: "./assets/resume.svg",
+    imageSrc: "/assets/resume.svg",
   },
   {
-    title: "self",
+    title: "Self",
     navigate_url: "/self",
-    imageSrc: "./assets/self.svg",
+    imageSrc: "/assets/self.svg",
   },
 ];
 
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
 function ThemeChangeButton() {
-  const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
   return (
-    <>
-      <IconButton
-        sx={{ ml: 1 }}
-        onClick={colorMode.toggleColorMode}
-        color="inherit"
-      >
-        {theme.palette.mode === "dark" ? (
-          <Brightness7Icon />
-        ) : (
-          <Brightness4Icon />
-        )}
-      </IconButton>
-    </>
+    <button
+      onClick={colorMode.toggleColorMode}
+      aria-label="Toggle dark mode"
+      className="inline-flex items-center gap-2 rounded-full border border-slate-300 dark:border-slate-700 px-3 py-1 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+    >
+      <span className="hidden dark:inline">🌙</span>
+      <span className="inline dark:hidden">☀️</span>
+      <span>Theme</span>
+    </button>
   );
 }
 
 export default function Home() {
-  const [mode, setMode] = useState("light");
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
-      },
-    }),
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", dark);
+  }, [dark]);
+
+  const colorMode = useMemo(
+    () => ({ toggleColorMode: () => setDark((v) => !v) }),
     []
   );
 
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode]
-  );
-
-  const onMouseEnter = (e) => {
-    console.log(
-      "AAAAAAAAAAAAAAAAAA",
-      e.target.src.slice(0, e.target.src.length - 4) + "_white.svg",
-      e.target.src
-    );
-    return e.target.src.slice(0, e.target.src.length - 4) + "_white.svg";
-  };
-
-  useLayoutEffect(() => {
-    gsap.set(".ball", { xPercent: -50, yPercent: -50 });
-
-    const ball = document.querySelector(".ball");
-    const pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    const mouse = { x: pos.x, y: pos.y };
-    const speed = 0.2;
-
-    const xSet = gsap.quickSetter(ball, "x", "px");
-
-    const ySet = gsap.quickSetter(ball, "y", "px");
-
-    window.addEventListener("mousemove", (e) => {
-      mouse.x = e.x;
-      mouse.y = e.y;
-    });
-
-    gsap.ticker.add(() => {
-      // adjust speed for higher refresh monitors
-      const dt = 1.0 - Math.pow(1.0 - speed, gsap.ticker.deltaRatio());
-
-      pos.x += (mouse.x - pos.x) * dt;
-      pos.y += (mouse.y - pos.y) * dt;
-      xSet(pos.x);
-      ySet(pos.y);
-    });
-
-    gsap.set(".ball1", { xPercent: -50, yPercent: -50 });
-    const ball1 = document.querySelector(".ball1");
-    const pos1 = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    const mouse1 = { x: pos1.x, y: pos1.y };
-    const speed1 = 0.1;
-    const xSet1 = gsap.quickSetter(ball1, "x", "px");
-    const ySet1 = gsap.quickSetter(ball1, "y", "px");
-
-    window.addEventListener("mousemove", (e) => {
-      mouse1.x = e.x;
-      mouse1.y = e.y;
-    });
-
-    gsap.ticker.add(() => {
-      // adjust speed for higher refresh monitors
-      const dt1 = 1.0 - Math.pow(1.0 - speed1, gsap.ticker.deltaRatio());
-
-      pos1.x += (mouse1.x - pos1.x) * dt1;
-      pos1.y += (mouse1.y - pos1.y) * dt1;
-      xSet1(pos1.x);
-      ySet1(pos1.y);
-    });
-    let mouseMove = document.querySelectorAll(".mouseHoverEventChange");
-    mouseMove.forEach((el) => {
-      let cursor = document.querySelector(".ball1");
-      el.addEventListener("mouseenter", (e) => {
-        gsap.to(cursor, {
-          width: "70px",
-          height: "70px",
-          opacity: 0.4,
-        });
-        gsap.to(el, {
-          background: "#ff7675",
-          color: "white",
-          boxShadow: "10px 10px 40px grey",
-          borderRadius: "5px",
-          rotation: -10,
-          scale: 1.2,
-          // transformOrigin: "left 50%",
-        });
-      });
-      el.addEventListener("mouseleave", (e) => {
-        gsap.to(cursor, {
-          width: "30px",
-          height: "30px",
-          opacity: 1,
-        });
-        gsap.to(el, {
-          background: "none",
-          color: "rgb(88, 89, 91)",
-          boxShadow: "none",
-          borderRadius: "0px",
-          rotation: 0,
-          scale: 1,
-        });
-      });
-    });
-    let homecontainer = document.querySelector(".mouseHoverEventChange img");
-    // homecontainer.addEventListener("click", (e) => {
-    //   let cursor = document.querySelector(".ball1");
-    //   gsap.to(cursor, {
-    //     height: "70px",
-    //     duration: 1,
-    //   });
-    //   gsap.to(cursor, {
-    //     width: "30px",
-    //     height: "30px",
-    //     duration: 1,
-    //   });
-    // });
-  }, []);
+  const logoUrl = process.env.PUBLIC_URL + "/logo.png";
+  const emailIcon = process.env.PUBLIC_URL + "/assets/email.svg";
 
   return (
     <ColorModeContext.Provider value={colorMode}>
-      <div
-        class="ball1"
-        style={{
-          background: mode == "light" ? "black" : "white",
-          // backgroundColor: "transparent",
-        }}
-      ></div>
-      <div
-        class="ball"
-        style={{ background: mode == "light" ? "red" : "green" }}
-      ></div>
-      <ThemeProvider theme={theme}>
-        <Box
-          sx={{
-            display: "flex",
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            bgcolor: "background.default",
-            // color: "text.primary",
-            borderRadius: 1,
-            p: 3,
-          }}
-        >
-          <Grid
-            container
-            className="containerForhomePage"
-            style={{
-              backgroundColor: mode == "ligh" && "rgba(242, 240, 238, 1)",
-            }}
-          >
-            <Grid
-              container
-              className="containerForPortfolio"
-              style={{
-                backgroundColor: mode == "light" && "rgba(255, 255, 255, 1)",
-              }}
-            >
-              {" "}
-              <Grid item md={2} lg={2} sm={2} className="containerforLeft">
-                <Grid
-                  item
-                  md={12}
-                  lg={12}
-                  sm={12}
-                  className="containerForFolioLogo"
-                >
-                  <img src="./logo.png" className="logoImgStyle" />
-                </Grid>
-              </Grid>
-              <Grid item md={10} lg={10} sm={10} className="navcontainer">
-                <Grid
-                  item
-                  md={6}
-                  lg={6}
-                  sm={6}
-                  className="containerForContactDtls"
-                >
-                  <Grid container>
-                    <Grid item md={9} lg={9} sm={9}>
-                      <div className="mouseHoverEventChange emaildiv">
-                        <div className="emailIconStyle">
-                          <img
-                            src="./assets/email.svg"
-                            className="svgImgStyle"
-                            onMouseOver={(e) =>
-                              (e.currentTarget.src = onMouseEnter(e))
-                            }
-                            onMouseOut={(e) => {
-                              e.current.src = onMouseEnter(e);
-                            }}
-                          />{" "}
-                        </div>
-                        <div className="emailStyle">
-                          jeevathangavelss@gmail.com
-                        </div>
-                      </div>
-                    </Grid>
-                    <div
-                      item
-                      md={3}
-                      lg={3}
-                      sm={3}
-                      className="themeChangeButton"
-                    >
-                      <ThemeChangeButton />
-                    </div>
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  md={6}
-                  lg={6}
-                  sm={6}
-                  className="containerForNavLinks"
-                >
-                  <Grid container>
-                    {navPages.map((item, index) => (
-                      <Grid item md={4} lg={4} sm={4}>
-                        <div className="mouseHoverEventChange emaildiv">
-                          <a
-                            href={item.navigate_url}
-                            className="anchorTextdecorationNone"
-                          >
-                            <div className="emailIconStyle">
-                              <img
-                                src={item.imageSrc}
-                                className="svgImgStyle"
-                              />{" "}
-                            </div>
-                            <div className="emailStyle">{item.title}</div>
-                          </a>
-                        </div>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Box>
-      </ThemeProvider>
+      <header className="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+          <Link to="/" className="inline-flex items-center gap-2">
+            <img src={logoUrl} alt="Logo" className="h-6 w-6" />
+            <span className="font-semibold text-slate-800 dark:text-slate-100">Jeeva</span>
+          </Link>
+          <nav className="hidden sm:flex items-center gap-6 text-slate-700 dark:text-slate-300">
+            {navPages.map((item) => (
+              <Link key={item.title} to={item.navigate_url} className="hover:text-slate-900 dark:hover:text-white transition">
+                {item.title}
+              </Link>
+            ))}
+            <ThemeChangeButton />
+          </nav>
+        </div>
+      </header>
+
+      <main className="bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-950">
+        <section className="max-w-6xl mx-auto px-4 py-20 md:py-28 grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <p className="uppercase tracking-wide text-blue-600 font-medium">Frontend Engineer</p>
+            <h1 className="mt-3 text-4xl md:text-5xl font-bold leading-tight text-slate-900 dark:text-white">
+              Building fast, beautiful, accessible web experiences.
+            </h1>
+            <p className="mt-4 text-slate-600 dark:text-slate-300">
+              I craft responsive interfaces with React, Tailwind CSS, and MUI, with a focus on performance and delightful interactions.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a href="mailto:jeevathangavelss@gmail.com" className="inline-flex items-center gap-2 rounded-lg bg-blue-600 text-white px-4 py-2 hover:bg-blue-700">
+                <img src={emailIcon} alt="Email" className="h-5 w-5" /> Contact
+              </a>
+              <Link to="/works" className="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <img src={process.env.PUBLIC_URL + "/assets/works.svg"} alt="Works" className="h-5 w-5" /> View Works
+              </Link>
+            </div>
+          </div>
+          <div className="relative">
+            <div className="aspect-square rounded-2xl bg-gradient-to-tr from-blue-500/20 to-cyan-400/20 dark:from-blue-400/10 dark:to-cyan-300/10 border border-slate-200 dark:border-slate-800" />
+            <div className="absolute inset-0 grid place-items-center">
+              <img src={logoUrl} alt="Profile" className="h-24 w-24 rounded-full ring-4 ring-white dark:ring-slate-900 shadow-lg" />
+            </div>
+          </div>
+        </section>
+
+        <section className="max-w-6xl mx-auto px-4 pb-20">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Quick links</h2>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {navPages.map((item) => (
+              <Link key={item.title} to={item.navigate_url} className="group rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 hover:shadow-md transition">
+                <div className="flex items-center gap-3">
+                  <img src={process.env.PUBLIC_URL + item.imageSrc} alt={item.title} className="h-6 w-6 opacity-80 group-hover:opacity-100" />
+                  <span className="font-medium text-slate-800 dark:text-slate-100">{item.title}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-slate-200 dark:border-slate-800 py-8">
+        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-slate-500">
+          <span>© {new Date().getFullYear()} Jeeva</span>
+          <a className="hover:text-slate-700 dark:hover:text-slate-300" href="mailto:jeevathangavelss@gmail.com">jeevathangavelss@gmail.com</a>
+        </div>
+      </footer>
     </ColorModeContext.Provider>
   );
 }
